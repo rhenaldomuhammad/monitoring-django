@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from .models import LogTable
 
+def table_logs(request):
+    logs = LogTable.objects.all()  # Mengambil semua data log
+    return render(request, 'theme/tables.html', {'logs': logs})
 
 class LoginView(APIView):
     def get(self, request, *args, **kwargs):
@@ -49,12 +53,15 @@ class ChartsView(APIView):
 
 
 class TablesView(APIView):
-    def get(self, request, *args, **kwargs):
-        return render(request, "theme/tables.html", {})
+    #def get(self, request, *args, **kwargs):
+        #return render(request, "theme/tables.html", {})
 
     def post(self, request, *args, **kwargs):
 
         return Response({'status': 200})
+    def get(self, request, *args, **kwargs):
+        logs = LogTable.objects.all()  # Mengambil semua data log
+        return render(request, 'theme/tables.html', {'logs': logs})
 
 
 class LogoutView(APIView):
