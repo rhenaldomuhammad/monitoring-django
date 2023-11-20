@@ -1,2 +1,2 @@
-WEBSITE_TOP_LEFT_NAME = "SB Admin 3"
-WEBSITE_FOOTER_NAME = "Your Website"
+WEBSITE_TOP_LEFT_NAME = "Modsecurity"
+WEBSITE_FOOTER_NAME = "Modsec-View"
