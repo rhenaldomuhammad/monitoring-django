@@ -83,10 +83,15 @@ WSGI_APPLICATION = 'sbadmin.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'log_analyst',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',  # Sesuaikan dengan host MySQL Anda
+        'PORT': '3306',       # Port MySQL Anda
     }
 }
+
 
 
 # Password validation
