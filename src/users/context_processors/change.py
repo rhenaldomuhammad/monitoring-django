@@ -1,2 +1,2 @@
-WEBSITE_TOP_LEFT_NAME = "Modsecurity"
+WEBSITE_TOP_LEFT_NAME = "Monitor-Sec"
 WEBSITE_FOOTER_NAME = "Modsec-View"
