@@ -70,10 +70,7 @@
 {% endblock %}
 
 {% block js_body %} 
-    <script type="text/javascript">
-        var labels = {{ labels|safe }};
-        var data = {{ values|safe }};
-    </script>
+    
     {% include 'theme/components/charts_scripts.html' %}
     <!-- Page level custom scripts (Only for charts page) -->
     <script src="{% static 'js/demo/chart-bar-demo.js' %}"></script>
