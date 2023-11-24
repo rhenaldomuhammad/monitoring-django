@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import LogTable
+from django.db.models import Count
 
 def table_logs(request):
     logs = LogTable.objects.all()  # Mengambil semua data log
@@ -45,10 +46,19 @@ class LogoutView(APIView):
 
 class ChartsView(APIView):
     def get(self, request, *args, **kwargs):
-        return render(request, "theme/charts.html", {})
+        # Query database untuk mengumpulkan data
+        data = LogTable.objects.values('message').annotate(total=Count('message')).order_by('message')
+
+        # Siapkan data untuk dikirim ke template
+        labels = [item['message'] for item in data]
+        values = [item['total'] for item in data]
+
+        # Kirim data ke template
+        context = {'labels': labels, 'values': values}
+        return render(request, "theme/charts.html", context)
 
     def post(self, request, *args, **kwargs):
-
+        # Implementasi untuk metode POST jika diperlukan
         return Response({'status': 200})
 
 

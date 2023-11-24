@@ -28,6 +28,7 @@
                             <th>No</th>
                             <th>Timestamp</th>
                             <th>IP Client</th>
+                            <th>Attack Type</th>
                             <th>Message</th>
                             
                         </tr>
@@ -39,6 +40,7 @@
                             <td>{{ forloop.counter }}</td>
                             <td>{{ log.timestamp }}</td>
                             <td>{{ log.client_ip }}</td>
+                            <td>{{ log.attack_type }}</td>
                             <td>{{ log.message }}</td>
                         </tr>
                         {% endfor %}

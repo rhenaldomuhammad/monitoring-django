@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'sbadmin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'log_analyst',
+        'NAME': 'modsecurity-parser',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',  # Sesuaikan dengan host MySQL Anda
