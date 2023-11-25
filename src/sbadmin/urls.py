@@ -25,4 +25,6 @@ urlpatterns = [
     re_path(r'^$', views.IndexView.as_view(), name="index_url"),
 
     path('users/', include('users.urls', namespace="users")),
+    path('get_stats', views.get_stats, name="get_stats"),
+    # path('get_stats' )
 ]
