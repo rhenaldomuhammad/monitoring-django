@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import LogTable
+from sbadmin.models import LogTable
 from django.db.models import Count
 
 def table_logs(request):
