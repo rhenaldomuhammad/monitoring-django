@@ -42,7 +42,7 @@ def get_attack_data():
     months = [(current_date - timezone.timedelta(days=30 * i)).strftime("%B %Y") for i in range(3)][::-1]
 
 	# Menentukan warna untuk setiap attack_type
-    colors = {"XSS Attack": "blue", "Unix Command Injection": "red", "SQL Injection": "green"}
+    colors = {"XSS Attack": "#4e73df", "Unix Command Injection": "#1cc88a", "SQL Injection": "#36b9cc"}
 
 	# Mengorganisir data ke dalam struktur yang diinginkan
     data_format = {
