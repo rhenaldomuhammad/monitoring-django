@@ -3,15 +3,15 @@ import os
 from datetime import datetime
 import requests
 
-TOKEN = '6250732185:AAEWwfi3B0uerfQu7n1dc4qyVjXy8biqnyA'
-CHAT_ID = '1041111909'
+TOKEN = 'tokenbot'
+CHAT_ID = 'chatbot'
 LOG_FILE = '/var/log/apache2/error.log'
 LAST_READ_POSITION_FILE = 'last_read_position.txt'
 LAST_NOTIFICATION_TIME_FILE = 'last_notification_time.txt'
 NOTIFICATION_INTERVAL = 120  # 2 minutes
 
 def send_telegram_message(message):
-    url = f'https://api.telegram.org/bot6250732185:AAEWwfi3B0uerfQu7n1dc4qyVjXy8biqnyA/sendMessage'
+    url = f'https://api.telegram.org/botToken/sendMessage'
     data = {'chat_id': CHAT_ID, 'text': message}
     requests.post(url, data=data)
 
