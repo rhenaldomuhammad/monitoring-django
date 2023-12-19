@@ -1,61 +1,59 @@
-import pymysql
-import re
-import time
+#final code rev
 from datetime import datetime
+import re
+import mysql.connector
 
-# Konfigurasi database
-DB_HOST = 'localhost'
-DB_USER = 'adminer1'
-DB_PASSWORD = 'adminer!'
-DB_NAME = 'log_parser'
-LOG_FILE_PATH = '/var/log/apache2/error.log'
+# ambil file
+log_file_path = '/var/log/apache2/error.log'
 
-# Fungsi untuk menghubungkan ke database
-def connect_to_database():
-    return pymysql.connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
+# koneksi db
+db_config = {
+    'host': 'localhost',
+    'user': 'auditer1',
+    'password': 'auditer!',
+    'database': 'modsecurity_parser'
+}
 
-# Fungsi untuk mendapatkan timestamp terakhir yang diproses
-def get_last_processed_timestamp(cursor):
-    query = "SELECT MAX(timestamp) FROM log_table"
-    cursor.execute(query)
-    result = cursor.fetchone()
-    return result[0] if result and result[0] else datetime.min
+# parser log ke db
+try:
+    connection = mysql.connector.connect(**db_config)
+    cursor = connection.cursor()
 
-# Fungsi untuk memproses log
-def process_logs():
-    db_connection = connect_to_database()
-    cursor = db_connection.cursor()
-
-    last_processed_timestamp = get_last_processed_timestamp(cursor)
-
-    with open(LOG_FILE_PATH, 'r') as file:
+    with open(log_file_path, 'r') as file:
         for line in file:
-            match = re.search(r'\[([A-Za-z]{3} \w{3} \d{2} \d{2}:\d{2}:\d{2}\.\d{6} \d{4})\].*\[client (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\].*\[msg "(.*?)"\]', line)
+            # Ekspresi reguler diperbarui untuk mengekstrak jenis serangan
+            match = re.search(r'\[([A-Za-z]{3} \w{3} \d{2} \d{2}:\d{2}:\d{2}\.\d{6} \d{4})\].*\[client (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\].*\[id "\d+"\] \[msg "(.*?)"\]', line)
             if match:
                 timestamp_str, client_ip, message = match.groups()
+                attack_type = None
 
-                # Konversi format timestamp
-                log_timestamp = datetime.strptime(timestamp_str, '%a %b %d %H:%M:%S.%f %Y')
-                mysql_timestamp = log_timestamp.strftime('%Y-%m-%d %H:%M:%S')
+                # Identifikasi jenis serangan berdasarkan pesan
+                if "Remote Command Execution: Unix Command Injection" in message:
+                    attack_type = "Unix Command Injection"
+                elif "XSS Attack Detected via libinjection" in message:
+                    attack_type = "XSS Attack"
+                elif "SQL Injection Attack Detected via libinjection" in message:
+                    attack_type = "SQL Injection"
 
-                if log_timestamp > last_processed_timestamp and (
-                    "Remote Command Execution: Unix Command Injection" in message or
-                    "XSS Attack Detected via libinjection" in message or
-                    "SQL Injection Attack Detected via libinjection" in message
-                ):
-                    insert_query = "INSERT INTO log_table (timestamp, client_ip, message) VALUES (%s, %s, %s)"
-                    values = (mysql_timestamp, client_ip, message)
+                # Jika jenis serangan dikenal, lakukan penyimpanan ke dalam database
+                if attack_type:
+                    # Konversi format timestamp
+                    log_timestamp = datetime.strptime(timestamp_str, '%a %b %d %H:%M:%S.%f %Y')
+                    mysql_timestamp = log_timestamp.strftime('%Y-%m-%d %H:%M:%S')
+
+                    # Simpan semua informasi yang diinginkan ke database
+                    insert_query = "INSERT INTO logs1 (timestamp, client_ip, attack_type, message) VALUES (%s, %s, %s, %s)"
+                    values = (mysql_timestamp, client_ip, attack_type, message)
                     cursor.execute(insert_query, values)
-                    db_connection.commit()
 
-    cursor.close()
-    db_connection.close()
+    connection.commit()
+    print("Parser Log Berhasil.")
 
-# Fungsi utama untuk menjalankan daemon
-def main():
-    while True:
-        process_logs()
-        time.sleep(3600)  # Tunggu selama 1 jam (3600 detik)
+except mysql.connector.Error as err:
+    print(f"Error: {err}")
 
-if __name__ == "__main__":
-    main()
+finally:
+    if 'connection' in locals() and connection.is_connected():
+        cursor.close()
+        connection.close()
+        print("Connection is Closed.")

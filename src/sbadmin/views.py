@@ -44,6 +44,9 @@ def get_attack_data():
 	# Menentukan warna untuk setiap attack_type
     colors = {"XSS Attack": "#4e73df", "Unix Command Injection": "#1cc88a", "SQL Injection": "#36b9cc"}
 
+    # hover_colors = {"XSS Attack": "#2e59d9", "Unix Command Injection": "#17a673", "SQL Injection": "#2c9faf"}
+    
+
 	# Mengorganisir data ke dalam struktur yang diinginkan
     data_format = {
         "time": months,
