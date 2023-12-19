@@ -26,5 +26,5 @@ urlpatterns = [
 
     path('users/', include('users.urls', namespace="users")),
     path('get_stats', views.get_stats, name="get_stats"),
-    # path('get_stats' )
+    path('get_bars', views.get_bars, name="get_bars" ),
 ]
