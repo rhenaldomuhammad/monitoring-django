@@ -21,12 +21,12 @@ class IndexView(APIView):
 @api_view(['GET'])
 
 def get_stats(request):
-	logs = LogTable.objects.values('attack_type').annotate(count=Count('attack_type'))
+    logs = LogTable.objects.values('attack_type').annotate(count=Count('attack_type')).order_by('attack_type')
 
-	attack_types = [log['attack_type'] for log in logs]
-	attack_counts = [log['count'] for log in logs]
+    attack_types = [log['attack_type'] for log in logs]
+    attack_counts = [log['count'] for log in logs]
 
-	return Response({"attack_types": attack_types, "attack_counts": attack_counts})
+    return Response({"attack_types": attack_types, "attack_counts": attack_counts})
 
 @api_view(['GET'])
 def get_bars(request):

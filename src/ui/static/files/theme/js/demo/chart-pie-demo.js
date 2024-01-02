@@ -12,8 +12,8 @@ function chartData(suppliedData)
       labels: suppliedData["attack_types"],
       datasets: [{
         data: suppliedData["attack_counts"],
-        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-        hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+        backgroundColor: [  '#36b9cc','#1cc88a','#4e73df',],
+        hoverBackgroundColor: [  '#2c9faf','#17a673','#2e59d9',],
         hoverBorderColor: "rgba(234, 236, 244, 1)",
       }],
     },
@@ -39,10 +39,10 @@ function chartData(suppliedData)
 
 function fetchDataAndUpdateChart() {
   $.ajax({
-    url: "get_stats", // Replace with the actual API endpoint
+    url: "get_stats", 
     method: 'GET',
     success: function(res) {
-      // Assuming the server returns an array of data points
+      
       chartData(res)
     },
     error: function(error) {
